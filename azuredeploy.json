@@ -4,7 +4,7 @@
     "parameters": {
       "adminUsername": {
         "type": "string",
-        "defaultValue": "btcpayserver",
+        "defaultValue": "PayBitcoin",
         "metadata": {
           "description": "The name of the SSH user."
         }
@@ -83,7 +83,7 @@
       },
       "repository": {
         "type": "string",
-        "defaultValue": "https://github.com/btcpayserver/btcpayserver-docker",
+        "defaultValue": "https://github.com/PayBitcoin/btcpayserver-docker",
         "metadata": {
           "description": "The GIT repository to pull the docker-compose from"
         }
@@ -100,17 +100,17 @@
       "imagePublisher": "Canonical",
       "imageOffer": "UbuntuServer",
       "OSDiskName": "osdiskfordockersimple",
-      "nicName": "BTCPayServerNetworkInterface",
+      "nicName": "PayBitcoinNetworkInterface",
       "addressPrefix": "10.0.0.0/16",
       "subnetName": "Subnet",
       "subnetPrefix": "10.0.0.0/24",
       "storageAccountType": "Standard_LRS",
-      "publicIPAddressName": "BTCPayServerPublicIP",
+      "publicIPAddressName": "PayBitcoinPublicIP",
       "publicIPAddressType": "Dynamic",
       "vmStorageAccountContainerName": "vhds",
       "vmAccountStorageName" : "[concat(uniqueString( resourceGroup().id, deployment().name ), 'storage')]",
-      "vmName": "BTCPayServerVM",
-      "virtualNetworkName": "BTCPayServerNetwork",
+      "vmName": "PayBitcoinVM",
+      "virtualNetworkName": "PayBitcoinNetwork",
       "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
       "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]"
     },
@@ -198,9 +198,9 @@
         "properties": {
           "securityRules": [
             {
-              "name": "BTCPayServer",
+              "name": "PayBitcoin",
               "properties": {
-                "description": "Allow inbound BTCPayServer access",
+                "description": "Allow inbound PayBitcoin access",
                 "protocol": "Tcp",
                 "sourcePortRange": "*",
                 "destinationPortRange": "443",
@@ -329,10 +329,10 @@
           "autoUpgradeMinorVersion": true,
           "settings": 
           { 
-              "fileUris" : ["https://raw.githubusercontent.com/btcpayserver/btcpayserver-azure/master/entrypoint.sh", 
-                            "https://raw.githubusercontent.com/btcpayserver/btcpayserver-azure/master/changedomain.sh",
-                            "https://raw.githubusercontent.com/btcpayserver/btcpayserver-azure/master/btcpay-restart.sh",
-                            "https://raw.githubusercontent.com/btcpayserver/btcpayserver-azure/master/btcpay-update.sh"],
+              "fileUris" : ["https://raw.githubusercontent.com/PayBitcoin/btcpayserver-azure/master/entrypoint.sh", 
+                            "https://raw.githubusercontent.com/PayBitcoin/btcpayserver-azure/master/changedomain.sh",
+                            "https://raw.githubusercontent.com/PayBitcoin/btcpayserver-azure/master/btcpay-restart.sh",
+                            "https://raw.githubusercontent.com/PayBitcoin/btcpayserver-azure/master/btcpay-update.sh"],
               "commandToExecute" : "[concat('./entrypoint.sh ', reference(concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName')), '2016-03-30').dnsSettings.fqdn, ' ', parameters('network'), ' ', parameters('notificationEmail'), ' ', parameters('repository'), ' ', parameters('branch'), ' \"', parameters('lightningNodeAlias'), '\" ', parameters('acceptBTC'), ' ', parameters('acceptLTC'), ' ', parameters('internalCLightning'))]"
           }
         }
